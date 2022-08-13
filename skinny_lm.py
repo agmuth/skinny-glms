@@ -4,7 +4,6 @@ class SkinnyLM():
     def __init__(self):
         self.theta_of_mu = np.vectorize(lambda mu: mu)  # maps theta as a function of mu
         self.mu_of_eta = np.vectorize(lambda eta: eta)  # maps mu as a function of eta
-        self.phi_of_mu = np.vectorize(lambda mu: 1.0)  # variance function
 
 
     def fit(self, X, y):
