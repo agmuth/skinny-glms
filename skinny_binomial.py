@@ -3,13 +3,13 @@ from skinny_lm import SkinnyLM
 
 class SkinnyBinomialRegressionLogitLink(SkinnyLM):
     def __init__(self):
-        self.link_fn = np.vectorize(lambda mu: np.log(mu / (1 - mu)))
-        self.inv_link_fn = np.vectorize(lambda eta: 1 / (1 + np.exp(-eta)))
-        self.variance_fn = np.vectorize(lambda mu: mu * (1 - mu))
+        super().__init__()
+        self.theta_of_mu = np.vectorize(lambda mu: np.log(mu / (1 - mu)))
+        self.mu_of_eta = np.vectorize(lambda eta: 1 / (1 + np.exp(-eta)))
 
 
 if __name__ == "__main__":
-    n = 100
+    n = 1000
     p = 1
 
     X = np.hstack([np.ones((n, p)), np.random.normal(size=(n, p))])
@@ -19,4 +19,5 @@ if __name__ == "__main__":
 
     lm = SkinnyBinomialRegressionLogitLink()
     lm.fit(X, y)
-    print(lm.beta.flatten(), b.flatten())
+    print(lm.b.flatten())
+    print(b.flatten())
