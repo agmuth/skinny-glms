@@ -2,8 +2,8 @@ from utils import *
 
 class SkinnyLM():
     def __init__(self):
-        self.theta_of_mu = np.vectorize(lambda mu: mu)  # maps theta as a function of mu
-        self.mu_of_eta = np.vectorize(lambda eta: eta)  # maps mu as a function of eta
+        self.theta_of_mu = lambda mu: mu  # maps theta as a function of mu
+        self.mu_of_eta = lambda eta: eta  # maps mu as a function of eta
 
 
     def fit(self, X, y):
