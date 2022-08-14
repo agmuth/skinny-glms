@@ -15,6 +15,17 @@ class SkinnyBinomialRegressionProbitLink(SkinnyBinomialRegressionLogitLink):
         self.mu_of_eta = np.vectorize(lambda eta: inv_probit(eta))
 
 
+class SkinnyBinomialRegressionComplementaryLogLogLink(SkinnyBinomialRegressionLogitLink):
+    def __init__(self):
+        super().__init__()
+        self.mu_of_eta = np.vectorize(lambda eta: inv_cloglog(eta))
+
+
+class SkinnyBinomialRegressionLogLogLink(SkinnyBinomialRegressionLogitLink):
+    def __init__(self):
+        super().__init__()
+        self.mu_of_eta = np.vectorize(lambda eta: inv_loglog(eta))
+
 if __name__ == "__main__":
     # n = 1000
     # p = 1
