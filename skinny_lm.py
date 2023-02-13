@@ -1,4 +1,5 @@
-from utils import *
+import numpy as np
+import numdifftools as nd
 
 class SkinnyLM():
     def __init__(self):
@@ -11,8 +12,8 @@ class SkinnyLM():
         # TODO: add in model specific params here - maybe
 
     def _iteratively_reweighted_least_squares(self, X, y, tol=1e-4, max_iters=100):
-        d_theta_d_mu = differentiate(self.theta_of_mu)
-        d_mu_d_eta = differentiate(self.mu_of_eta)
+        d_theta_d_mu = nd.Derivative(self.theta_of_mu)
+        d_mu_d_eta = nd.Derivative(self.mu_of_eta)
 
         b = np.linalg.inv(X.T @ X) @ X.T @ y
         W = None
