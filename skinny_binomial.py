@@ -49,7 +49,12 @@ if __name__ == "__main__":
     probs = inv_probit(X @ b.T)
     y = np.random.binomial(1, probs, (n, 1))
 
-    lm = SkinnyBinomialRegressionProbitLink()
-    lm.fit(X, y)
-    print(lm.b.flatten())
-    print(b.flatten())
+    skinny_model = SkinnyBinomialRegressionProbitLink()
+    skinny_model.fit(X, y)
+
+    import statsmodels.api as sm
+    stats_model = sm.GLM(y, X, family=sm.families.Binomial(sm.genmod.families.links.probit())).fit()
+    
+    print(f"true parameter estimates: {b.flatten()}")
+    print(f"skinny parameter estimates: {skinny_model.b.flatten()}")
+    print(f"statsmodels parameter estimates: {stats_model.params.flatten()}")

@@ -39,7 +39,7 @@ class SkinnyLM():
 
 
 if __name__ == "__main__":
-
+    
     # square = lambda x: x**2
     # square_dx = differentiate(square)
     # print(square_dx(1))
@@ -50,9 +50,15 @@ if __name__ == "__main__":
 
     X = np.hstack([np.ones((n, p)), np.random.normal(size=(n, p))])
     b = np.random.normal(size=(1, p+1))
-    y = X @ b.T #+ np.random.normal(scale=sigma, size=(n, 1))
+    y = X @ b.T + np.random.normal(scale=sigma, size=(n, 1))
 
-    lm = SkinnyLM()
-    lm.fit(X, y)
-    print(lm.b.flatten())
-    print(b.flatten())
+    skinny_model = SkinnyLM()
+    skinny_model.fit(X, y)
+
+    import statsmodels.api as sm
+    stats_model = sm.GLM(y, X, family=sm.families.Gaussian()).fit()
+    
+    print(f"true parameter estimates: {b.flatten()}")
+    print(f"skinny parameter estimates: {skinny_model.b.flatten()}")
+    print(f"statsmodels parameter estimates: {stats_model.params.flatten()}")
+    
