@@ -27,6 +27,7 @@ class SkinnyBinomialRegressionLogLogLink(SkinnyBinomialRegressionLogitLink):
         self.mu_of_eta = lambda eta: inv_loglog(eta)
 
 if __name__ == "__main__":
+    import time
     # n = 1000
     # p = 1
 
@@ -50,11 +51,17 @@ if __name__ == "__main__":
     y = np.random.binomial(1, probs, (n, 1))
 
     skinny_model = SkinnyBinomialRegressionProbitLink()
+    tic1 = time.time()
     skinny_model.fit(X, y)
+    toc1 = time.time()
 
     import statsmodels.api as sm
-    stats_model = sm.GLM(y, X, family=sm.families.Binomial(sm.genmod.families.links.probit())).fit()
+    stats_model = sm.GLM(y, X, family=sm.families.Binomial(sm.genmod.families.links.probit()))
+    
+    tic2 = time.time()
+    stats_model = stats_model.fit()
+    toc2 = time.time()
     
     print(f"true parameter estimates: {b.flatten()}")
-    print(f"skinny parameter estimates: {skinny_model.b.flatten()}")
-    print(f"statsmodels parameter estimates: {stats_model.params.flatten()}")
+    print(f"skinny parameter estimates: {skinny_model.b.flatten()} fitting seconds: {toc1-tic1}")
+    print(f"statsmodels parameter estimates: {stats_model.params.flatten()} fitting seconds: {toc2-tic2}")

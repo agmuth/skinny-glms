@@ -15,6 +15,7 @@ class SkinnyGammaRegressionInverseLink(SkinnyLM):
 
 
 if __name__ == "__main__":
+    import time
     n = 1000
     p = 1
 
@@ -25,11 +26,16 @@ if __name__ == "__main__":
     y = np.random.gamma(1, 1/rate, (n, 1))
 
     skinny_model = SkinnyGammaRegressionLogLink()
+    tic1 = time.time()
     skinny_model.fit(X, y)
+    toc1 = time.time()
 
     import statsmodels.api as sm
-    stats_model = sm.GLM(y, X, family=sm.families.Gamma(sm.genmod.families.links.log())).fit()
+    stats_model = sm.GLM(y, X, family=sm.families.Gamma(sm.genmod.families.links.log()))
+    tic2 = time.time()
+    stats_model = stats_model.fit()
+    toc2 = time.time()
     
     print(f"true parameter estimates: {b.flatten()}")
-    print(f"skinny parameter estimates: {skinny_model.b.flatten()}")
-    print(f"statsmodels parameter estimates: {stats_model.params.flatten()}")
+    print(f"skinny parameter estimates: {skinny_model.b.flatten()} fitting seconds: {toc1-tic1}")
+    print(f"statsmodels parameter estimates: {stats_model.params.flatten()} fitting seconds: {toc2-tic2}")
