@@ -7,15 +7,15 @@ class BaseLink:
 class IdentityLink(BaseLink):
     def __init__(self):
         self.inv_link = identity
-        self.inv_link_deriv = nd.Derivative(identity)
+        self.inv_link_deriv = differentiate(identity)
 
 class LogitLink(BaseLink):
     def __init__(self):
         self.inv_link = sigmoid
-        self.inv_link_deriv = nd.Derivative(sigmoid)
+        self.inv_link_deriv = differentiate(sigmoid)
 
 class LogLink(BaseLink):
     def __init__(self):
         self.inv_link = exponential
-        self.inv_link_deriv = nd.Derivative(exponential)
+        self.inv_link_deriv = differentiate(exponential)
         
