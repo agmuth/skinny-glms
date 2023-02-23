@@ -14,3 +14,8 @@ def logit(x: np.ndarray):
 def sigmoid(x: np.ndarray):
     return 1 / (1 + np.exp(-x))
 
+def negative_inverse(x: np.ndarray):
+    return -1/x
+
+def exponential(x: np.ndarray):
+    return np.exp(x)

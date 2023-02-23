@@ -10,7 +10,7 @@ class SkinnyGLM():
         pass
 
     
-    def _irls(self, X, y, max_iters=100, tol=1e-4):
+    def _irls(self, X, y, max_iters=1000, tol=1e-4):
         # use ols values as starting values 
         W_i = np.diag(np.ones(y.shape[0]))
         beta_i = self._wols(X, y, W_i)
@@ -35,6 +35,13 @@ class SkinnyGLM():
 
 
 if __name__ == "__main__":
+
+    from families import *
+    from links import *
+    from functions import *
+    import statsmodels.api as sm
+
+
     # from families import GaussianFamily
     # from links import IdentityLink
 
@@ -52,26 +59,45 @@ if __name__ == "__main__":
     # print(f"true parameter estimates: {b.flatten()}")
     # print(f"skinny parameter estimates: {skinny_model.b.flatten()}")
 
-    from families import BinomialFamily
-    from links import LogitLink
-    from functions import sigmoid
-    import statsmodels.api as sm
+    # from families import BinomialFamily
+    # from links import LogitLink
+    # from functions import sigmoid
+    # import statsmodels.api as sm
+
+    # n = 1000
+    # p = 1
+
+    # X = np.hstack([np.ones((n, p)), np.random.normal(size=(n, p))])
+    # b = np.random.normal(size=(1, p+1))
+    # probs = sigmoid(X @ b.T)
+    # y = np.random.binomial(1, probs, (n, 1))
+    
+
+    # skinny_model = SkinnyGLM(family=BinomialFamily(link=LogitLink()))
+    # skinny_model._irls(X, y)
+
+    # stats_model = sm.GLM(y, X, family=sm.families.Binomial(sm.genmod.families.links.logit()))
+    # stats_model = stats_model.fit()
+
+    # print(f"true parameter estimates: {b.flatten()}")
+    # print(f"skinny parameter estimates: {skinny_model.b.flatten()}")
+    # print(f"statsmodels parameter estimates: {stats_model.params.flatten()}")
 
     n = 1000
     p = 1
 
     X = np.hstack([np.ones((n, p)), np.random.normal(size=(n, p))])
     b = np.random.normal(size=(1, p+1))
-    probs = sigmoid(X @ b.T)
-    y = np.random.binomial(1, probs, (n, 1))
     
+    rate = np.exp(-1 * X @ b.T)
+    y = np.random.gamma(1, 1/rate, (n, 1))
 
-    skinny_model = SkinnyGLM(family=BinomialFamily(link=LogitLink()))
+    skinny_model = SkinnyGLM(family=GammaFamily(link=LogLink()))
     skinny_model._irls(X, y)
 
-    stats_model = sm.GLM(y, X, family=sm.families.Binomial(sm.genmod.families.links.logit()))
+    stats_model = sm.GLM(y, X, family=sm.families.Gamma(sm.genmod.families.links.log()))
     stats_model = stats_model.fit()
-
+    
     print(f"true parameter estimates: {b.flatten()}")
     print(f"skinny parameter estimates: {skinny_model.b.flatten()}")
     print(f"statsmodels parameter estimates: {stats_model.params.flatten()}")

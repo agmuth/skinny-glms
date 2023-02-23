@@ -13,4 +13,9 @@ class LogitLink(BaseLink):
     def __init__(self):
         self.inv_link = sigmoid
         self.inv_link_deriv = nd.Derivative(sigmoid)
+
+class LogLink(BaseLink):
+    def __init__(self):
+        self.inv_link = exponential
+        self.inv_link_deriv = nd.Derivative(exponential)
         
