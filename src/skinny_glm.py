@@ -18,8 +18,8 @@ class SkinnyGLM():
         for _ in range(max_iters):
             eta_i = X @ beta_i
             m_i = self.family.link.inv_link(eta_i)  # current estimate of mu
-            u_i = eta_i + self.family.link.inv_link_deriv(m_i) * (y - m_i)  # working/linearized response
-            W_i = np.diag((self.family.inv_variance(m_i) * self.family.link.inv_link_deriv(m_i)**2).flatten())
+            u_i = eta_i + self.family.link.link_deriv(m_i) * (y - m_i)  # working/linearized response
+            W_i = np.diag((self.family.inv_variance(m_i) * self.family.link.inv_link_deriv(eta_i)**2).flatten())
             delta_beta = self._wols(X, u_i, W_i) - beta_i
             beta_i += delta_beta
 

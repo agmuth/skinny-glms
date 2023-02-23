@@ -25,3 +25,6 @@ def negative_inverse(x: np.ndarray):
 
 def exponential(x: np.ndarray):
     return np.exp(x)
+
+def log(x: np.ndarray):
+    return np.log(x)
