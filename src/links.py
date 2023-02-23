@@ -15,16 +15,11 @@ class IdentityLink(BaseLink):
        
 
 class LogitLink(BaseLink):
-    def __init__(self):
-        self.link = logit
-        self.link_deriv = differentiate(logit)
-        self.inv_link = sigmoid
-        self.inv_link_deriv = differentiate(sigmoid)
+    super().__init__(logit, sigmoid)
+
 
 class LogLink(BaseLink):
     def __init__(self):
-        self.link = log
-        self.link_deriv = differentiate(log)
-        self.inv_link = exponential
-        self.inv_link_deriv = differentiate(exponential)
+        super().__init__(logarithm, exponential)
+        
         
