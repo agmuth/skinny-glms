@@ -15,7 +15,8 @@ class IdentityLink(BaseLink):
        
 
 class LogitLink(BaseLink):
-    super().__init__(logit, sigmoid)
+    def __init__(self):
+        super().__init__(logit, sigmoid)
 
 
 class LogLink(BaseLink):
