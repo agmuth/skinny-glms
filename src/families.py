@@ -10,16 +10,16 @@ class GaussianFamily(BaseFamily):
     def __init__(self, link):
         super().__init__(link)
         self.canonical_link = identity
-        self.canonical_link_deriv = differentiate(identity)
+        self.canonical_link_inv_deriv = differentiate(identity)
 
 class BinomialFamily(BaseFamily):
     def __init__(self, link: BaseLink):
         super().__init__(link)
         self.canonical_link = logit
-        self.canonical_link_deriv = differentiate(logit)  
+        self.canonical_link_inv_deriv = differentiate(sigmoid)  
 
 class GammaFamily(BaseFamily):
     def __init__(self, link: BaseLink):
         super().__init__(link)
         self.canonical_link = negative_inverse
-        self.canonical_link_deriv = differentiate(negative_inverse) 
+        self.canonical_link_inv_deriv = differentiate(negative_inverse) 
