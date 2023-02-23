@@ -2,14 +2,17 @@ from functions import *
 import numdifftools as nd
 
 class BaseLink:
-    pass
+    def __init__(self, link: callable, inv_link: callable):
+        self.link = link
+        self.inv_link = inv_link
+        self.link_deriv = differentiate(link)
+        self.inv_link_deriv = differentiate(inv_link)
+    
 
 class IdentityLink(BaseLink):
     def __init__(self):
-        self.link = identity
-        self.link_deriv = differentiate(identity)
-        self.inv_link = identity
-        self.inv_link_deriv = differentiate(identity)
+        super().__init__(identity, identity)
+       
 
 class LogitLink(BaseLink):
     def __init__(self):
