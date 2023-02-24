@@ -3,7 +3,7 @@ from scipy.special import erf, erfinv
 
 MACHINE_EPS = np.finfo(np.float64).eps
 
-def differentiate(f: callable, h: float=1e-4) -> callable:
+def differentiate(f: callable, h: float=1e-8) -> callable:
     h_inv = h**-1
     def f_prime(x: np.ndarray):
         return 0.5 * h_inv * (f(x + h) - f(x - h))
@@ -15,8 +15,8 @@ def identity(x: np.ndarray):
     return x
 
 def logit(x: np.ndarray):
-    if safe_division(x, 1-x).min() <= 0:
-        raise Exception
+    x[x >= 1.] = 1. - MACHINE_EPS
+    x[x <= 0.] = MACHINE_EPS
     return np.log(safe_division(x, 1-x))
 
 def sigmoid(x: np.ndarray):
