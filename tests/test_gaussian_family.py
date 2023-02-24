@@ -22,7 +22,7 @@ def test_gaussian(links):
     p = 1
     sigma = 1
 
-    X = np.hstack([np.ones((n, p)), np.random.normal(size=(n, p))])
+    X = np.hstack([np.ones((n, 1)), np.random.normal(size=(n, p))])
     b = np.random.normal(size=(1, p+1))
     mu = skinny_link.inv_link(X @ b.T)
     y = mu + np.random.normal(scale=sigma, size=(n, 1))

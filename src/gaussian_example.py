@@ -6,10 +6,10 @@ import statsmodels.api as sm
 import numpy as np
 
 n = 1000
-p = 1
+p = 2
 sigma = 0.5
 
-X = np.hstack([np.ones((n, p)), np.random.normal(size=(n, p))])
+X = np.hstack([np.ones((n, 1)), np.random.normal(size=(n, p))])
 b = np.random.normal(size=(1, p+1))
 y = X @ b.T + np.random.normal(scale=sigma, size=(n, 1))
 

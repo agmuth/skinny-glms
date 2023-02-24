@@ -21,7 +21,7 @@ def test_poisson(links):
     n = 1000
     p = 1
 
-    X = np.hstack([np.ones((n, p)), np.random.normal(size=(n, p))])
+    X = np.hstack([np.ones((n, 1)), np.random.normal(size=(n, p))])
     b = np.random.normal(size=(1, p+1))
     offset = np.random.randint(1, 2, (n, 1))
     lam = offset * np.exp(X @ b.T)
