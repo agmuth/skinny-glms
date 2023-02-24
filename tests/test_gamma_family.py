@@ -6,7 +6,7 @@ import statsmodels.api as sm
 import pytest
 
 TOL = 1e-4
-SEED = 1234
+SEED = 2023
 
 LINKS = [
     (LogLink(), sm.genmod.families.links.log())
@@ -25,7 +25,7 @@ def test_gamma(links):
     b = np.random.normal(size=(1, p+1))
     rate = skinny_link.inv_link(X @ b.T)
     y = np.random.gamma(1, 1/rate, (n, 1))
-    
+
     skinny_model = SkinnyGLM(family=GammaFamily(skinny_link))
     skinny_model._irls(X, y)
 

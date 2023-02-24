@@ -15,7 +15,7 @@ class SkinnyGLM():
         W_i = np.diag(np.ones(y.shape[0]))
         beta_i = self._wols(X, y, W_i)
 
-        for _ in range(max_iters):
+        for i in range(max_iters):
             eta_i = X @ beta_i
             m_i = self.family.link.inv_link(eta_i)  # current estimate of mu
             u_i = eta_i + self.family.link.link_deriv(m_i) * (y - m_i)  # working/linearized response

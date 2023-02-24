@@ -6,7 +6,7 @@ import statsmodels.api as sm
 import pytest
 
 TOL = 1e-4
-SEED = 1234
+SEED = 2023
 
 LINKS = [
     (IdentityLink(), sm.genmod.families.links.identity())

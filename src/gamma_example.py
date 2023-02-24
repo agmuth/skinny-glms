@@ -5,7 +5,7 @@ from skinny_glm import SkinnyGLM
 import statsmodels.api as sm
 import numpy as np
 
-skinny_link = LogitLink()
+skinny_link = LogLink()
 sm_link = sm.genmod.families.links.log()
 
 n = 1000

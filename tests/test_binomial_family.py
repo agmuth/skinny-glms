@@ -6,11 +6,11 @@ import statsmodels.api as sm
 import pytest
 
 TOL = 1e-4
-SEED = 1234
+SEED = 2023
 
 LINKS = [
     (LogitLink(), sm.genmod.families.links.logit()),
-    # (ProbitLink(), sm.genmod.families.links.probit())
+    (ProbitLink(), sm.genmod.families.links.probit())
 ]
 
 @pytest.mark.parametrize("links", LINKS)
