@@ -22,12 +22,14 @@ def sigmoid(x: np.ndarray):
     return 1 / (1 + np.exp(-x))
 
 def negative_inverse(x: np.ndarray):
+    x = np.sign(x) * np.clip(np.abs(x), MACHINE_EPS, np.Inf)
     return -1/x
 
 def exponential(x: np.ndarray):
     return np.exp(x)
 
 def logarithm(x: np.ndarray):
+    x = np.clip(x, MACHINE_EPS, np.Inf)
     return np.log(x)
 
 def inv_probit(x: np.ndarray):
@@ -46,3 +48,7 @@ def cloglog(x: np.ndarray):
 
 def inv_loglog(x: np.ndarray):
     return np.exp(-np.exp(x))
+
+def loglog(x: np.ndarray):
+    x = np.clip(x, MACHINE_EPS, np.Inf)
+    return np.log(np.log(x))

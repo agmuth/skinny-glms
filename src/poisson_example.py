@@ -9,18 +9,18 @@ skinny_link = LogLink()
 sm_link = sm.genmod.families.links.log()
 
 n = 1000
-p = 2
+p = 1
 
 X = np.hstack([np.ones((n, 1)), np.random.normal(size=(n, p))])
 b = np.random.normal(size=(1, p+1))
-offset = np.random.randint(1, 3, (n, 1))
+offset = np.random.randint(1, 10, (n, 1))
 lam = offset * np.exp(X @ b.T)
 y = np.random.poisson(lam, (n, 1))
 
 skinny_model = SkinnyGLM(family=PoissonFamily(skinny_link))
 skinny_model._irls(X, y, offset)
 
-stats_model = sm.GLM(y, X, family=sm.families.Poisson(sm_link), offset=offset.flatten())
+stats_model = sm.GLM(y, X, family=sm.families.Poisson(sm_link), offset=skinny_link.link(offset).flatten())
 stats_model = stats_model.fit()
 
 print(f"true parameter estimates: {b.flatten()}")
