@@ -22,9 +22,9 @@ class SkinnyGLM():
         beta_i = self._wols(X, y, W_i)
 
         for i in range(max_iters):
-            eta_i = X @ beta_i + eta_scale_offsets
-            m_i = self.family.link.inv_link(eta_i) # current estimate of mu
-            u_i = eta_i + self.family.link.link_deriv(m_i) * (y - m_i) - eta_scale_offsets  # working/linearized response
+            eta_i = X @ beta_i
+            m_i = self.family.link.inv_link(eta_i + eta_scale_offsets) # current estimate of mu
+            u_i = eta_i + self.family.link.link_deriv(m_i) * (y - m_i)  # working/linearized response
             W_i = np.diag(
                 np.multiply(
                     self.family.inv_variance(m_i), 
