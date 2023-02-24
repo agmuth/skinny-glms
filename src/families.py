@@ -22,3 +22,7 @@ class BinomialFamily(BaseFamily):
 class GammaFamily(BaseFamily):
     def __init__(self, link: BaseLink):
         super().__init__(link, canonical_link = negative_inverse)
+
+class PoissonFamily(BaseFamily):
+    def __init__(self, link: BaseLink):
+        super().__init__(link, canonical_link = logarithm)
