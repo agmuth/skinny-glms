@@ -10,7 +10,8 @@ SEED = 2023
 
 LINKS = [
     (LogitLink(), sm.genmod.families.links.logit()),
-    (ProbitLink(), sm.genmod.families.links.probit())
+    (ProbitLink(), sm.genmod.families.links.probit()),
+    (CLogLogLink(), sm.genmod.families.links.cloglog())
 ]
 
 @pytest.mark.parametrize("links", LINKS)

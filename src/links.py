@@ -20,6 +20,10 @@ class ProbitLink(BaseLink):
     def __init__(self):
         super().__init__(probit, inv_probit)
 
+class CLogLogLink(BaseLink):
+    def __init__(self):
+        super().__init__(cloglog, inv_cloglog)
+
 class LogLink(BaseLink):
     def __init__(self):
         super().__init__(logarithm, exponential)
