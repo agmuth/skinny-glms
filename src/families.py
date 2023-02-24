@@ -10,6 +10,7 @@ class BaseFamily:
     def inv_variance(self, mu: np.ndarray) -> np.ndarray:
         return self.canonical_link_deriv(mu)
 
+
 class GaussianFamily(BaseFamily):
     def __init__(self, link):
         super().__init__(link, canonical_link = identity)

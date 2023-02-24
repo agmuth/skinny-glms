@@ -10,7 +10,7 @@ class SkinnyGLM():
         pass
 
     
-    def _irls(self, X, y, max_iters=int(1e4), tol=1e-10):
+    def _irls(self, X, y, max_iters=int(1e4), tol=1e-4):
         # use ols values as starting values 
         W_i = np.diag(np.ones(y.shape[0]))
         beta_i = self._wols(X, y, W_i)
@@ -23,7 +23,7 @@ class SkinnyGLM():
             delta_beta = self._wols(X, u_i, W_i) - beta_i
             beta_i += delta_beta
 
-            if (delta_beta**2).mean() < tol: 
+            if (delta_beta**2).sum() < tol: 
                 break
 
         self.b = beta_i

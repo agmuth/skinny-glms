@@ -1,5 +1,4 @@
 from functions import *
-import numdifftools as nd
 
 class BaseLink:
     def __init__(self, link: callable, inv_link: callable):
@@ -13,11 +12,13 @@ class IdentityLink(BaseLink):
     def __init__(self):
         super().__init__(identity, identity)
        
-
 class LogitLink(BaseLink):
     def __init__(self):
         super().__init__(logit, sigmoid)
 
+class ProbitLink(BaseLink):
+    def __init__(self):
+        super().__init__(probit, inv_probit)
 
 class LogLink(BaseLink):
     def __init__(self):
