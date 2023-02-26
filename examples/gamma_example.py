@@ -1,11 +1,8 @@
-from families import *
-from links import *
-from functions import *
-from skinny_glm import SkinnyGLM
+import skinnyglms as skinny
 import statsmodels.api as sm
 import numpy as np
 
-skinny_link = LogLink()
+skinny_link = skinny.links.LogLink()
 sm_link = sm.genmod.families.links.log()
 
 n = 1000
@@ -16,7 +13,7 @@ b = np.random.normal(size=(1, p+1))
 rate = skinny_link.inv_link(X @ b.T)
 y = np.random.gamma(1, 1/rate, (n, 1))
 
-skinny_model = SkinnyGLM(family=GammaFamily(skinny_link))
+skinny_model = skinny.skinny_glm.SkinnyGLM(family=skinny.families.GammaFamily(skinny_link))
 skinny_model._irls(X, y)
 
 stats_model = sm.GLM(y, X, family=sm.families.Gamma(sm_link))

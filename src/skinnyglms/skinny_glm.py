@@ -1,4 +1,4 @@
-from families import BaseFamily
+from skinnyglms.families import BaseFamily
 import numpy as np
 
 class SkinnyGLM():

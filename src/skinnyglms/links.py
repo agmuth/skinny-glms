@@ -1,4 +1,4 @@
-from functions import *
+from skinnyglms.functions import *
 
 class BaseLink:
     def __init__(self, link: callable, inv_link: callable):

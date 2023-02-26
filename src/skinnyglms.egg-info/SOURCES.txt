@@ -1,0 +1,15 @@
+README
+pyproject.toml
+src/skinnyglms/__init__.py
+src/skinnyglms/families.py
+src/skinnyglms/functions.py
+src/skinnyglms/links.py
+src/skinnyglms/skinny_glm.py
+src/skinnyglms.egg-info/PKG-INFO
+src/skinnyglms.egg-info/SOURCES.txt
+src/skinnyglms.egg-info/dependency_links.txt
+src/skinnyglms.egg-info/top_level.txt
+tests/test_binomial_family.py
+tests/test_gamma_family.py
+tests/test_gaussian_family.py
+tests/test_poisson_family.py

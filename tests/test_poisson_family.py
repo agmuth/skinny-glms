@@ -1,15 +1,13 @@
-import numpy as np
-from skinny_glm import SkinnyGLM
-from families import PoissonFamily
-from links import *
+import skinnyglms as skinny
 import statsmodels.api as sm
+import numpy as np
 import pytest
 
 TOL = 1e-4
 SEED = 2023
 
 LINKS = [
-    (LogLink(), sm.genmod.families.links.log())
+    (skinny.links.LogLink(), sm.genmod.families.links.log())
 ]
 
 @pytest.mark.parametrize("links", LINKS)
@@ -27,13 +25,7 @@ def test_poisson(links):
     lam = offset * np.exp(X @ b.T)
     y = np.random.poisson(lam, (n, 1))
 
-    skinny_model = SkinnyGLM(family=PoissonFamily(skinny_link))
-    skinny_model._irls(X, y)
-
-    stats_model = sm.GLM(y, X, family=sm.families.Poisson(sm_link))
-    stats_model = stats_model.fit()
-
-    skinny_model = SkinnyGLM(family=PoissonFamily(skinny_link))
+    skinny_model = skinny.skinny_glm.SkinnyGLM(family=skinny.families.PoissonFamily(skinny_link))
     skinny_model._irls(X, y)
 
     stats_model = sm.GLM(y, X, family=sm.families.Poisson(sm_link))

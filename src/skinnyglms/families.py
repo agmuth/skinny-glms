@@ -1,5 +1,5 @@
-from functions import * 
-from links import BaseLink
+from skinnyglms.functions import * 
+from skinnyglms.links import BaseLink
 
 class BaseFamily:
     def __init__(self, link:BaseLink, canonical_link: callable=identity):

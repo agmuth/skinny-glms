@@ -1,15 +1,13 @@
-import numpy as np
-from skinny_glm import SkinnyGLM
-from families import GaussianFamily
-from links import *
+import skinnyglms as skinny
 import statsmodels.api as sm
+import numpy as np
 import pytest
 
 TOL = 1e-4
 SEED = 2023
 
 LINKS = [
-    (IdentityLink(), sm.genmod.families.links.identity())
+    (skinny.links.IdentityLink(), sm.genmod.families.links.identity())
 ]
 
 @pytest.mark.parametrize("links", LINKS)
@@ -27,7 +25,7 @@ def test_gaussian(links):
     mu = skinny_link.inv_link(X @ b.T)
     y = mu + np.random.normal(scale=sigma, size=(n, 1))
     
-    skinny_model = SkinnyGLM(family=GaussianFamily(skinny_link))
+    skinny_model = skinny.skinny_glm.SkinnyGLM(family=skinny.families.GaussianFamily(skinny_link))
     skinny_model._irls(X, y)
 
     stats_model = sm.GLM(y, X, family=sm.families.Gaussian(sm_link))
