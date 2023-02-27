@@ -1,18 +1,21 @@
 import skinnyglms as skinny
 import statsmodels.api as sm
+from skinnyglms.mappings.statsmodels import STATSMODELS_MAPPING
 import numpy as np
 import pytest
+from tests.utils import SEED, TOL
 
-TOL = 1e-4
-SEED = 2023
+FAMILIES = STATSMODELS_MAPPING['GAMMA']['families']
+LINKS = STATSMODELS_MAPPING['GAMMA']['links']
 
-LINKS = [
-    (skinny.links.LogLink(), sm.genmod.families.links.log())
-]
 
 @pytest.mark.parametrize("links", LINKS)
-def test_gamma(links):
+def test_gaussian(links):
     np.random.seed(SEED)
+
+    skinny_family = FAMILIES[0]
+    sm_familiy = FAMILIES[1]
+
     skinny_link = links[0]
     sm_link = links[1]
 
@@ -24,10 +27,10 @@ def test_gamma(links):
     rate = skinny_link.inv_link(X @ b.T)
     y = np.random.gamma(1, 1/rate, (n, 1))
 
-    skinny_model = skinny.skinny_glm.SkinnyGLM(family=skinny.families.GammaFamily(skinny_link))
+    skinny_model = skinny.skinny_glm.SkinnyGLM(family=skinny_family(skinny_link))
     skinny_model._irls(X, y)
 
-    stats_model = sm.GLM(y, X, family=sm.families.Gamma(sm_link))
+    stats_model = sm.GLM(y, X, family=sm_familiy(sm_link))
     stats_model = stats_model.fit()
 
     print(f"true parameter estimates: {b.flatten()}")

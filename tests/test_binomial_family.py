@@ -1,20 +1,21 @@
 import skinnyglms as skinny
 import statsmodels.api as sm
+from skinnyglms.mappings.statsmodels import STATSMODELS_MAPPING
 import numpy as np
 import pytest
+from tests.utils import SEED, TOL
 
-TOL = 1e-4
-SEED = 2023
+FAMILIES = STATSMODELS_MAPPING['BINOMIAL']['families']
+LINKS = STATSMODELS_MAPPING['BINOMIAL']['links']
 
-LINKS = [
-    (skinny.links.LogitLink(), sm.genmod.families.links.logit()),
-    (skinny.links.ProbitLink(), sm.genmod.families.links.probit()),
-    (skinny.links.CLogLogLink(), sm.genmod.families.links.cloglog())
-]
 
 @pytest.mark.parametrize("links", LINKS)
-def test_binomial(links):
+def test_gaussian(links):
     np.random.seed(SEED)
+
+    skinny_family = FAMILIES[0]
+    sm_familiy = FAMILIES[1]
+
     skinny_link = links[0]
     sm_link = links[1]
 
@@ -26,10 +27,10 @@ def test_binomial(links):
     probs = skinny_link.inv_link(X @ b.T)
     y = np.random.binomial(1, probs, (n, 1))
     
-    skinny_model = skinny.skinny_glm.SkinnyGLM(family=skinny.families.BinomialFamily(skinny_link))
+    skinny_model = skinny.skinny_glm.SkinnyGLM(family=skinny_family(skinny_link))
     skinny_model._irls(X, y)
 
-    stats_model = sm.GLM(y, X, family=sm.families.Binomial(sm_link))
+    stats_model = sm.GLM(y, X, family=sm_familiy(sm_link))
     stats_model = stats_model.fit()
 
     print(f"true parameter estimates: {b.flatten()}")
