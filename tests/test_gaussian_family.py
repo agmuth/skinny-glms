@@ -30,7 +30,7 @@ def test_gaussian(links):
     mu = skinny_link.inv_link(X @ b.T)
     y = mu + np.random.normal(scale=sigma, size=(n, 1))
     
-    skinny_model = skinny.skinny_glm.SkinnyGLM(family=skinny_family(skinny_link))
+    skinny_model = skinny.glm.SkinnyGLM(family=skinny_family(skinny_link))
     skinny_model._irls(X, y)
 
     stats_model = sm.GLM(y, X, family=sm_familiy(sm_link))

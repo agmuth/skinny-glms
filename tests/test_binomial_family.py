@@ -27,7 +27,7 @@ def test_gaussian(links):
     probs = skinny_link.inv_link(X @ b.T)
     y = np.random.binomial(1, probs, (n, 1))
     
-    skinny_model = skinny.skinny_glm.SkinnyGLM(family=skinny_family(skinny_link))
+    skinny_model = skinny.glm.SkinnyGLM(family=skinny_family(skinny_link))
     skinny_model._irls(X, y)
 
     stats_model = sm.GLM(y, X, family=sm_familiy(sm_link))

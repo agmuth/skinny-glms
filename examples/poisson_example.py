@@ -14,7 +14,7 @@ offset = np.random.randint(1, 10, (n, 1))
 lam = offset * np.exp(X @ b.T)
 y = np.random.poisson(lam, (n, 1))
 
-skinny_model = skinny.skinny_glm.SkinnyGLM(family=skinny.families.PoissonFamily(skinny_link))
+skinny_model = skinny.glm.SkinnyGLM(family=skinny.families.PoissonFamily(skinny_link))
 skinny_model._irls(X, y, offset)
 
 stats_model = sm.GLM(y, X, family=sm.families.Poisson(sm_link), offset=skinny_link.link(offset).flatten())

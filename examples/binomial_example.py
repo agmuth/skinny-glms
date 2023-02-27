@@ -13,7 +13,7 @@ b = np.random.normal(size=(1, p+1))
 probs = skinny_link.inv_link(X @ b.T)
 y = np.random.binomial(1, probs, (n, 1))
 
-skinny_model = skinny.skinny_glm.SkinnyGLM(family=skinny.families.BinomialFamily(skinny_link))
+skinny_model = skinny.glm.SkinnyGLM(family=skinny.families.BinomialFamily(skinny_link))
 skinny_model._irls(X, y)
 
 stats_model = sm.GLM(y, X, family=sm.families.Binomial(sm_link))
