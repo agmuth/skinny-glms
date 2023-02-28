@@ -37,8 +37,14 @@ class SkinnyGLM():
             if (delta_beta**2).sum() < tol: 
                 break
 
+        # save vars 
         self.b = beta_i
         self.W = W_i
+        self.df = y.shape[0] - X.shape[1] - 1
+
+        # empircal estimate of dispersion
+        mu = self.family.link.inv_link(X @ self.b + eta_scale_offsets)
+        self.dispersion = np.sum(np.square(y - mu) * self.family.inv_variance(mu)) / self.df
 
 
     def _wols(self, X, y, W):

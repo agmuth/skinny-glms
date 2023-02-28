@@ -24,4 +24,7 @@ print(f"true parameter estimates: {b.flatten()}")
 print(f"skinny parameter estimates: {skinny_model.b.flatten()}")
 print(f"statsmodels parameter estimates: {stats_model.params.flatten()}")
 
+print(f"skinny dispersion estimates: {skinny_model.dispersion}")
+print(f"statsmodels dispersion estimates: {stats_model.scale}")
+
 
