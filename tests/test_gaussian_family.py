@@ -18,8 +18,8 @@ def test_gaussian(links):
     skinny_family = FAMILIES[0]
     sm_familiy = FAMILIES[1]
 
-    skinny_link = links[0]
-    sm_link = links[1]
+    skinny_link = links[0]()
+    sm_link = links[1]()
 
     n = 1000
     p = 1
@@ -28,7 +28,7 @@ def test_gaussian(links):
     X = np.hstack([np.ones((n, 1)), np.random.normal(size=(n, p))])
     b = np.random.normal(size=(1, p+1))
     mu = skinny_link.inv_link(X @ b.T)
-    y = mu + np.random.normal(scale=sigma, size=(n, 1))
+    y = np.random.normal(loc=mu, scale=sigma, size=(n, 1))
     
     skinny_model = skinny.glm.SkinnyGLM(family=skinny_family(skinny_link))
     skinny_model._irls(X, y)

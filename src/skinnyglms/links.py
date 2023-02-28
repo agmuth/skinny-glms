@@ -27,5 +27,9 @@ class CLogLogLink(BaseLink):
 class LogLink(BaseLink):
     def __init__(self):
         super().__init__(logarithm, exponential)
+
+class NegativeInverseLink(BaseLink):
+    def __init__(self):
+        super().__init__(negative_inverse, negative_inverse)
         
         

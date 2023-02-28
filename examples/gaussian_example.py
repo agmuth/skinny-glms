@@ -23,3 +23,8 @@ print(f"statsmodels parameter estimates: {stats_model.params.flatten()}")
 print(f"true dispersion estimates: {sigma**2}")
 print(f"skinny dispersion estimates: {skinny_model.dispersion}")
 print(f"statsmodels dispersion estimates: {stats_model.scale}")
+
+theta = skinny_model.family.link.inv_link(X @ skinny_model.b)
+phi = skinny_model.dispersion
+samples = skinny_model.family.sample(theta, phi, 5)
+print(samples[:2])
