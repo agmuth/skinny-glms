@@ -5,8 +5,6 @@ import numpy as np
 import pytest
 from tests.utils import SEED, TOL
 
-DISTRIBUTIONS = ["GAUSSIAN", "BINOMIAL", "GAMMA", "POISSON"]
-
 test_params = list()
 
 for distn in DISTRIBUTIONS:
