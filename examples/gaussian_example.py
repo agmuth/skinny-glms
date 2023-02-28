@@ -1,7 +1,7 @@
 import skinnyglms as skinny
 import statsmodels.api as sm
 import numpy as np
-
+import timeit
 n = 1000
 p = 2
 sigma = 0.5
@@ -11,9 +11,15 @@ b = np.random.normal(size=(1, p+1))
 y = X @ b.T + np.random.normal(scale=sigma, size=(n, 1))
 
 skinny_model = skinny.glm.SkinnyGLM(family=skinny.families.GaussianFamily(link=skinny.links.IdentityLink()))
-skinny_model._irls(X, y)
+skinny_time = timeit.repeat("skinny_model._irls(X, y)", repeat=2, number=100, globals=globals())
+print(skinny_time)
 
 stats_model = sm.GLM(y, X, family=sm.families.Gaussian(sm.genmod.families.links.identity()))
+
+
+sm_time = timeit.repeat("stats_model.fit()", repeat=2, number=100, globals=globals())
+print(sm_time)
+
 stats_model = stats_model.fit()
 
 print(f"true parameter estimates: {b.flatten()}")
