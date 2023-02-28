@@ -3,7 +3,7 @@ from skinnyglms.mappings.statsmodels import STATSMODELS_MAPPING
 import statsmodels.api as sm
 import numpy as np
 import pytest
-from tests.utils import SEED, TOL
+from tests.utils import SEED, TOL, DISTRIBUTIONS
 
 test_params = list()
 
