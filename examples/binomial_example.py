@@ -26,4 +26,7 @@ print(f"statsmodels parameter estimates: {stats_model.params.flatten()}")
 print(f"skinny dispersion estimates: {skinny_model.dispersion}")
 print(f"statsmodels dispersion estimates: {stats_model.scale}")
 
+print(skinny_model.iter)
+print(stats_model.fit_history['iteration'])
+
 
