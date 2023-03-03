@@ -24,10 +24,10 @@ def speed_test(families, links, n, p):
     repeats = 10
     number = 10
 
-    skinny_model = skinny.glm.SkinnyGLM(family=skinny.families.GaussianFamily(link=skinny.links.IdentityLink()))
-    stats_model = sm.GLM(y, X, family=sm.families.Gaussian(sm.genmod.families.links.identity()))
-    skinny_time = min(timeit.repeat("skinny_model._irls(X, y)", repeat=repeats, number=number, globals=locals())) / number
-    sm_time = min(timeit.repeat("stats_model.fit()", repeat=repeats, number=number, globals=locals())) / number
+    skinny_model = skinny.glm.SkinnyGLM(family=skinny_family)
+    stats_model = sm.GLM(y, X, family=sm_familiy)
+    skinny_time = min(timeit.repeat("skinny_model._irls(X, y)", repeat=repeats, number=number, globals=locals())) / number * micro
+    sm_time = min(timeit.repeat("stats_model.fit()", repeat=repeats, number=number, globals=locals())) / number * micro
     res = {
         "family" :  families[0],
         "link" : links[0],

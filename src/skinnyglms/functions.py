@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.special import erf, erfinv
+from numba import jit 
 
 MACHINE_EPS = np.finfo(np.float64).eps
 
@@ -16,7 +17,7 @@ def identity(x: np.ndarray):
 
 def logit(x: np.ndarray):
     x = np.clip(x, MACHINE_EPS, 1-MACHINE_EPS)
-    return np.log(safe_division(x, 1-x))
+    return np.log(x) - np.log(1-x)
 
 def sigmoid(x: np.ndarray):
     return 1 / (1 + np.exp(-x))
