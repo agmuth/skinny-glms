@@ -12,7 +12,11 @@ for distn in DISTRIBUTIONS:
     for links in STATSMODELS_MAPPING[distn]['links']:
         test_params.append((families, links))
 
-@pytest.mark.parametrize("n, p", [(100, 1), (100, 2)])
+n_and_p = list()
+n_and_p += [(100, 0), (100, 1), (100, 2)]
+
+
+@pytest.mark.parametrize("n, p", n_and_p)
 @pytest.mark.parametrize("families, links", test_params)
 def test_statsmodels_agreement(families, links, n, p):
     np.random.seed(SEED)
