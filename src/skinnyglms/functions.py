@@ -1,6 +1,5 @@
 import numpy as np
 from scipy.special import erf, erfinv
-from numba import jit 
 
 MACHINE_EPS = np.finfo(np.float64).eps
 
@@ -9,8 +8,6 @@ def differentiate(f: callable, h: float=1e-8) -> callable:
     def f_prime(x: np.ndarray):
         return 0.5 * h_inv * (f(x + h) - f(x - h))
     return f_prime
-
-safe_division = np.vectorize(lambda x, y: x / y if np.abs(y) > MACHINE_EPS else np.sign(y) * x / MACHINE_EPS)
 
 def identity(x: np.ndarray):
     return x

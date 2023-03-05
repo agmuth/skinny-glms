@@ -19,7 +19,15 @@ class SkinnyGLM():
 
         # use ols values as starting values 
         W_i = np.ones((y.shape[0], 1))
-        beta_i = self._wols(X, y, W_i)
+        # beta_i = self._wols(X, y, W_i)
+        # beta_i = self._wols(
+        #     X, 
+        #     self.family.link.link(y), 
+        #     W_i
+        # )
+        beta_i = np.zeros((X.shape[1], 1))
+        beta_i[0, 0] += self.family.link.link(y.mean())
+
 
         self.iter = 1
         while self.iter < max_iters:
