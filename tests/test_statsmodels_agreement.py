@@ -4,16 +4,17 @@ import statsmodels.api as sm
 import numpy as np
 import pytest
 from tests.utils import SEED, TOL, DISTRIBUTIONS
+from itertools import product
 
 test_params = list()
 
 for distn in DISTRIBUTIONS:
-    families = STATSMODELS_MAPPING[distn]['families']
-    for links in STATSMODELS_MAPPING[distn]['links']:
-        test_params.append((families, links))
+    test_params += product(
+        (STATSMODELS_MAPPING[distn]['families'],),
+        STATSMODELS_MAPPING[distn]['links']
+    )
 
-n_and_p = list()
-n_and_p += [(100, 0), (100, 1), (100, 2)]
+n_and_p = [(10**n, 10**p if p >= 0 else 0) for n in range(1, 5) for p in range(-1, n)]
 
 
 @pytest.mark.parametrize("n, p", n_and_p)
@@ -40,4 +41,4 @@ def test_statsmodels_agreement(families, links, n, p):
     print(f"true parameter estimates: {b.flatten()}")
     print(f"skinny parameter estimates: {skinny_model.b.flatten()}")
     print(f"statsmodels parameter estimates: {stats_model.params.flatten()}")
-    assert ((skinny_model.b.flatten() - stats_model.params.flatten())**2).sum() < TOL
+    assert ((skinny_model.b.flatten() - stats_model.params.flatten())**2).sum() / (p+1) < TOL
