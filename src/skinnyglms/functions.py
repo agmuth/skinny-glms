@@ -1,7 +1,12 @@
 import numpy as np
 from scipy.special import erf, erfinv
 
-MACHINE_EPS = np.finfo(np.float64).eps
+DTYPE = np.float64
+MACHINE_EPS = np.finfo(DTYPE).eps
+MACHINE_MIN = np.finfo(DTYPE).min
+MACHINE_MAX = np.finfo(DTYPE).max
+LOG_MACHINE_MAX = np.log(MACHINE_MAX)
+
 
 def differentiate(f: callable, h: float=1e-8) -> callable:
     h_inv = h**-1
@@ -20,14 +25,15 @@ def sigmoid(x: np.ndarray):
     return 1 / (1 + np.exp(-x))
 
 def negative_inverse(x: np.ndarray):
-    x = np.sign(x) * np.clip(np.abs(x), MACHINE_EPS, np.Inf)
+    x = np.sign(x) * np.clip(np.abs(x), MACHINE_EPS, MACHINE_MAX)
     return -1/x
 
 def exponential(x: np.ndarray):
+    x = np.clip(x, MACHINE_MIN, LOG_MACHINE_MAX)
     return np.exp(x)
 
 def logarithm(x: np.ndarray):
-    x = np.clip(x, MACHINE_EPS, np.Inf)
+    x = np.clip(x, MACHINE_EPS, MACHINE_MAX)
     return np.log(x)
 
 def inv_probit(x: np.ndarray):
@@ -38,15 +44,14 @@ def probit(x: np.ndarray):
     return np.sqrt(2) * erfinv(2*x - 1)
 
 def inv_cloglog(x: np.ndarray):
-    return 1 - np.exp(-np.exp(x))
+    return 1 - exponential(-exponential(x))
 
 def cloglog(x: np.ndarray):
     x = np.clip(x, MACHINE_EPS, 1-MACHINE_EPS)
-    return np.log(-np.log(1-x))
+    return logarithm(-logarithm(1-x))
 
 def inv_loglog(x: np.ndarray):
-    return np.exp(-np.exp(x))
+    return exponential(-exponential(x))
 
 def loglog(x: np.ndarray):
-    x = np.clip(x, MACHINE_EPS, np.Inf)
-    return np.log(np.log(x))
+    return logarithm(logarithm(x))
