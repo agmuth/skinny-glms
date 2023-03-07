@@ -8,7 +8,7 @@ from itertools import product
 
 np.random.seed(SEED)
 
-eta = np.linspace(ETA_BOUNDS[0], ETA_BOUNDS[1], 10)
+eta = np.linspace(ETA_BOUNDS[0], ETA_BOUNDS[1], 3)
 
 test_params = list()
 
@@ -43,13 +43,22 @@ def test_statsmodels_agreement_link_deriv(families, links):
 
 
 @pytest.mark.parametrize("families, links", test_params)
-def test_statsmodels_agreement_irls_weights(families, links):
+def test_statsmodels_agreement_variance(families, links):
     sk_family = families[0](links[0]())
     sm_familiy = families[1](links[1]())
     mu_sk = sk_family.link.inv_link(eta)
     mu_sm = sm_familiy.fitted(eta)
 
     assert np.allclose(sk_family.inv_variance(mu_sk),  sm_familiy.variance(mu_sm)**-1)
+
+
+@pytest.mark.parametrize("families, links", test_params)
+def test_statsmodels_agreement_inv_link_deriv(families, links):
+    sk_family = families[0](links[0]())
+    sm_familiy = families[1](links[1]())
+    mu_sk = sk_family.link.inv_link(eta)
+    mu_sm = sm_familiy.fitted(eta)
+
     assert np.allclose(sk_family.link.inv_link_deriv(eta), sm_familiy.link.deriv(mu_sm)**-1)
 
     

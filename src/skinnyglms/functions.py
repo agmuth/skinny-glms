@@ -10,20 +10,6 @@ LOG_MACHINE_MAX = np.log(MACHINE_MAX)
 def clip_probability(x: np.ndarray):
     return np.clip(x, MACHINE_EPS, 1-MACHINE_EPS)
 
-def differentiate(f: callable, h: float=1e-8) -> callable:
-    h_inv = h**-1
-    def f_prime(x: np.ndarray):
-        # return 0.5 * h_inv * (f(x + h) - f(x - h))
-        return h_inv * sum(
-            [
-                w*f(x + n*h) for w, n in zip(
-                    [1/12, -2/3, 2/3, -1/12],
-                    [-2, -1, 1, 2]
-                )
-            ]
-        )
-    return f_prime
-
 def identity(x: np.ndarray):
     return x
 
