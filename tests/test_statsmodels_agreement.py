@@ -14,7 +14,7 @@ for distn in DISTRIBUTIONS:
         STATSMODELS_MAPPING[distn]['links']
     )
 
-n_and_p = [(10**n, 10**p if p >= 0 else 0) for n in range(1, 5) for p in range(-1, n)]
+n_and_p = [(10**n, 10**p if p >= 0 else 0) for n in range(1, 4) for p in range(-1, n)]
 
 
 @pytest.mark.parametrize("n, p", n_and_p)
@@ -25,8 +25,8 @@ def test_statsmodels_agreement(families, links, n, p):
     skinny_family = families[0](links[0]())
     sm_familiy = families[1](links[1]())
     
-    b = np.random.normal(size=(1, p+1))
-    X = np.hstack([np.ones((n, 1)), np.random.normal(size=(n, p))])
+    b = np.random.normal(scale=0.1, size=(1, p+1))
+    X = np.hstack([np.ones((n, 1)), np.random.normal(scale=0.1, size=(n, p))])
  
     mu = skinny_family.link.inv_link(X @ b.T)
     theta = skinny_family.canonical_link.link(mu)

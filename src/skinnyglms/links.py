@@ -1,35 +1,87 @@
 from skinnyglms.functions import *
 
 class BaseLink:
-    def __init__(self, link: callable, inv_link: callable):
-        self.link = link
-        self.inv_link = inv_link
-        self.link_deriv = differentiate(link)
-        self.inv_link_deriv = differentiate(inv_link)
+    @staticmethod
+    def link(x: np.array):
+        raise NotImplementedError
+    @staticmethod
+    def inv_link(x: np.array):
+        raise NotImplementedError
+    @staticmethod
+    def link_deriv(x: np.array):
+        raise NotImplementedError
+    @staticmethod
+    def inv_link_deriv(x: np.array):
+        raise NotImplementedError
     
 
 class IdentityLink(BaseLink):
-    def __init__(self):
-        super().__init__(identity, identity)
-       
+    @staticmethod
+    def link(x: np.array):
+        return x
+    @staticmethod
+    def inv_link(x: np.array):
+        return x
+    @staticmethod
+    def link_deriv(x: np.array):
+        return np.ones(x.shape)
+    @staticmethod
+    def inv_link_deriv(x: np.array):
+        return np.ones(x.shape)
+
+
 class LogitLink(BaseLink):
-    def __init__(self):
-        super().__init__(logit, sigmoid)
+    @staticmethod
+    def link(x: np.array):
+        return logit(x)
+    @staticmethod
+    def inv_link(x: np.array):
+        return sigmoid(x)
+    @staticmethod
+    def link_deriv(x: np.array):
+        return inverse(x*(1-x))
+    @staticmethod
+    def inv_link_deriv(x: np.array):
+        return sigmoid(x)*(1-sigmoid(x))
 
-class ProbitLink(BaseLink):
-    def __init__(self):
-        super().__init__(probit, inv_probit)
 
-class CLogLogLink(BaseLink):
-    def __init__(self):
-        super().__init__(cloglog, inv_cloglog)
+# class ProbitLink(BaseLink):
+#     def __init__(self):
+#         super().__init__(probit, inv_probit)
+
+
+# class CLogLogLink(BaseLink):
+#     def __init__(self):
+#         super().__init__(cloglog, inv_cloglog)
+
 
 class LogLink(BaseLink):
-    def __init__(self):
-        super().__init__(logarithm, exponential)
+    @staticmethod
+    def link(x: np.array):
+        return logarithm(x)
+    @staticmethod
+    def inv_link(x: np.array):
+        return exponential(x)
+    @staticmethod
+    def link_deriv(x: np.array):
+        return inverse(x)
+    @staticmethod
+    def inv_link_deriv(x: np.array):
+        return exponential(x)
+
 
 class NegativeInverseLink(BaseLink):
-    def __init__(self):
-        super().__init__(negative_inverse, negative_inverse)
+    @staticmethod
+    def link(x: np.array):
+        return -inverse(x)
+    @staticmethod
+    def inv_link(x: np.array):
+        return -inverse(x)
+    @staticmethod
+    def link_deriv(x: np.array):
+        return inverse(np.square(x))
+    @staticmethod
+    def inv_link_deriv(x: np.array):
+        return inverse(np.square(x))
         
         

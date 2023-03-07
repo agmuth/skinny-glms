@@ -34,9 +34,9 @@ def logit(x: np.ndarray):
 def sigmoid(x: np.ndarray):
     return 1 / (1 + exponential(-x))
 
-def negative_inverse(x: np.ndarray):
+def inverse(x: np.ndarray):
     x = np.sign(x) * np.clip(np.abs(x), MACHINE_EPS, MACHINE_MAX)
-    return -1/x
+    return 1/x
 
 def exponential(x: np.ndarray):
     x = np.clip(x, MACHINE_MIN, LOG_MACHINE_MAX)
