@@ -18,16 +18,27 @@ class SkinnyGLM():
             eta_scale_offsets = self.family.link.link(offset)
 
         # use ols values as starting values 
-        W_i = np.ones((y.shape[0], 1))
-        # beta_i = self._wols(X, y, W_i)
-        # beta_i = self._wols(
-        #     X, 
-        #     self.family.link.link(y), 
-        #     W_i
-        # )
-        beta_i = np.zeros((X.shape[1], 1))
-        beta_i[0, 0] += self.family.link.link(y.mean())
+        # W_i = np.ones((y.shape[0], 1))
+        # # beta_i = self._wols(X, y, W_i)
+        # # beta_i = self._wols(
+        # #     X, 
+        # #     self.family.link.link(y), 
+        # #     W_i
+        # # )
+        
+        # beta_i = np.zeros((X.shape[1], 1))
+        # beta_i[0, 0] += self.family.link.link(y.mean())
+        
 
+        m_i = (y + 0.5)/2
+        eta_i = self.family.link.link(m_i)
+        u_i = eta_i + self.family.link.link_deriv(m_i) * (y - m_i)  # working/linearized response
+        W_i =  np.multiply(
+                self.family.inv_variance(m_i), 
+                np.square(self.family.link.inv_link_deriv(eta_i))
+            )
+
+        beta_i = self._wols(X, u_i, W_i)
 
         self.iter = 1
         while self.iter < max_iters:

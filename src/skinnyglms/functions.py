@@ -13,7 +13,15 @@ def clip_probability(x: np.ndarray):
 def differentiate(f: callable, h: float=1e-8) -> callable:
     h_inv = h**-1
     def f_prime(x: np.ndarray):
-        return 0.5 * h_inv * (f(x + h) - f(x - h))
+        # return 0.5 * h_inv * (f(x + h) - f(x - h))
+        return h_inv * sum(
+            [
+                w*f(x + n*h) for w, n in zip(
+                    [1/12, -2/3, 2/3, -1/12],
+                    [-2, -1, 1, 2]
+                )
+            ]
+        )
     return f_prime
 
 def identity(x: np.ndarray):
