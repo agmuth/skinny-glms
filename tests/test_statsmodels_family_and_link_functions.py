@@ -8,7 +8,7 @@ from itertools import product
 
 np.random.seed(SEED)
 
-eta = np.linspace(ETA_BOUNDS[0], ETA_BOUNDS[1], 3)
+eta = np.linspace(ETA_BOUNDS[0], ETA_BOUNDS[1], 10)
 
 test_params = list()
 

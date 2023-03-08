@@ -44,6 +44,7 @@ class LogitLink(BaseLink):
         return sigmoid(x)
     @staticmethod
     def link_deriv(x: np.array):
+        x = clip_probability(x)
         return inverse(x*(1-x))
     @staticmethod
     def inv_link_deriv(x: np.array):
@@ -121,7 +122,8 @@ def cdf_link_factory(rv):
         
         @staticmethod        
         def link_deriv(x: np.array):
-            return 1/rv.pdf(rv.cdf(x))
+            x = clip_probability(x)
+            return 1. / rv.pdf(rv.ppf(x))
             
 
         @staticmethod        

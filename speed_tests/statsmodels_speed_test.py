@@ -15,15 +15,15 @@ def speed_test(families, links, n, p):
     skinny_family = families[0](links[0]())
     sm_familiy = families[1](links[1]())
     
-    b = np.random.normal(size=(1, p+1))
-    X = np.hstack([np.ones((n, 1)), np.random.normal(size=(n, p))])
+    b = np.random.normal(scale=0.1, size=(1, p+1))
+    X = np.hstack([np.ones((n, 1)), np.random.normal(scale=0.1, size=(n, p))])
  
     mu = skinny_family.link.inv_link(X @ b.T)
     theta = skinny_family.canonical_link.link(mu)
     y = skinny_family.sample(theta)
     repeats = 10
     number = 10
-
+    micro = 1e6
     skinny_model = skinny.glm.SkinnyGLM(family=skinny_family)
     stats_model = sm.GLM(y, X, family=sm_familiy)
     skinny_time = min(timeit.repeat("skinny_model._irls(X, y)", repeat=repeats, number=number, globals=locals())) / number * micro
@@ -41,4 +41,6 @@ if __name__ == "__main__":
     for distn in DISTRIBUTIONS:
         families = STATSMODELS_MAPPING[distn]['families']
         for links in STATSMODELS_MAPPING[distn]['links']:
-            print(speed_test(families, links, 1000, 1))
+            print(families[0], links[0])
+            print(speed_test(families, links, 10000, 10))
+            print()
