@@ -31,8 +31,8 @@ def speed_test(families, links, n, p):
     res = {
         "family" :  families[0],
         "link" : links[0],
-        "skinnyGLM_time": skinny_time,
-        "statmodels_time": sm_time
+        "skinnyGLM_time": int(skinny_time),
+        "statmodels_time": int(sm_time)
     }
     return res
 

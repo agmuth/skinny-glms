@@ -25,3 +25,5 @@ skinny_model._irls(X, y)
 
 # python -m cProfile -o speed_tests/profile_irls.prof speed_tests/profile_irls.py 
 # snakeviz speed_tests/profile_irls.prof
+
+# python -m cProfile -o speed_tests/profile_irls.prof speed_tests/profile_irls.py | snakeviz speed_tests/profile_irls.prof
