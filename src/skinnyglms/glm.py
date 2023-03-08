@@ -63,7 +63,7 @@ class SkinnyGLM():
 
         # save vars 
         self.b = beta_i
-        self.W = np.diag(W_i.flatten())
+        self.W = W_i.flatten()
         self.df = y.shape[0] - X.shape[1] - 1        
         self.dispersion = np.sum(np.square(y - m_i) * self.family.inv_variance(m_i)) / self.df # empirical estimate of dispersion
 
