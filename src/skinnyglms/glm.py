@@ -1,4 +1,5 @@
-from skinnyglms.families import BaseFamily
+from skinnyglms.families import *
+from skinnyglms.links import *
 import numpy as np
 
 class SkinnyGLM():
@@ -17,54 +18,56 @@ class SkinnyGLM():
         else:
             eta_scale_offsets = self.family.link.link(offset)
 
-        # use ols values as starting values 
-        # W_i = np.ones((y.shape[0], 1))
-        # # beta_i = self._wols(X, y, W_i)
-        # # beta_i = self._wols(
-        # #     X, 
-        # #     self.family.link.link(y), 
-        # #     W_i
-        # # )
         
-        # beta_i = np.zeros((X.shape[1], 1))
-        # beta_i[0, 0] += self.family.link.link(y.mean())
-        
-
-        # m_i = y
-        # eta_i = self.family.link.link(m_i)
-        # u_i = eta_i + self.family.link.link_deriv(m_i) * (y - m_i)  # working/linearized response
-        # W_i =  np.multiply(
-        #         self.family.inv_variance(m_i), 
-        #         np.square(self.family.link.inv_link_deriv(eta_i))
-        #     )
-
-        # beta_i = self._wols(X, u_i, W_i)
-
+        eta_i = np.empty((X.shape[0], 1))
+        m_i = np.empty((y.shape))
+        u_i = np.empty(y.shape)
         W_i = np.ones((X.shape[0], 1))
         beta_i = self._wols(X, y, W_i)
 
         self.iter = 1
-        while self.iter < max_iters:
-            self.iter += 1
-            eta_i = X @ beta_i
-            m_i = self.family.link.inv_link(eta_i + eta_scale_offsets) # current estimate of mu
-            u_i = eta_i + self.family.link.link_deriv(m_i) * (y - m_i)  # working/linearized response
-            W_i =  np.multiply(
-                    self.family.inv_variance(m_i), 
-                    np.square(self.family.link.inv_link_deriv(eta_i))
+        if not (isinstance(self.family, GaussianFamily) and isinstance(self.family.link, IdentityLink)):
+
+            while self.iter < max_iters:
+                self.iter += 1
+                # eta_i = X @ beta_i
+                np.matmul(X, beta_i, out=eta_i)
+                m_i = self.family.link.inv_link(eta_i + eta_scale_offsets) # current estimate of mu
+                # u_i = eta_i + self.family.link.link_deriv(m_i) * (y - m_i)  # working/linearized response
+
+                np.add(
+                    eta_i, 
+                    np.multiply(
+                        self.family.link.link_deriv(m_i),
+                        np.subtract(y, m_i)
+                    ),
+                    out=u_i
                 )
-            delta_beta = self._wols(X, u_i, W_i) - beta_i
-            
-            if (delta_beta**2).sum() < tol: 
-                break
-            else:
-                beta_i += delta_beta
+
+                np.multiply(
+                        self.family.inv_variance(m_i), 
+                        np.square(self.family.link.inv_link_deriv(eta_i)),
+                        out=W_i
+                    )
+
+                # W_i =  np.multiply(
+                #         self.family.inv_variance(m_i), 
+                #         np.square(self.family.link.inv_link_deriv(eta_i))
+                #     )
+                delta_beta = self._wols(X, u_i, W_i) - beta_i
+                
+                if (delta_beta**2).sum() < tol: 
+                    break
+                else:
+                    beta_i += delta_beta
+                    # m_i.fill(0.)
 
 
         # save vars 
         self.b = beta_i
         self.W = W_i.flatten()
         self.df = y.shape[0] - X.shape[1] - 1        
+        m_i = self.family.link.inv_link(X @ beta_i + eta_scale_offsets) 
         self.dispersion = np.sum(np.square(y - m_i) * self.family.inv_variance(m_i)) / self.df # empirical estimate of dispersion
 
 

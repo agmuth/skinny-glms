@@ -36,20 +36,20 @@ class IdentityLink(BaseLink):
         return np.ones(x.shape)
 
 
-# class LogitLink(BaseLink):
-#     @staticmethod
-#     def link(x: np.array):
-#         return logit(x)
-#     @staticmethod
-#     def inv_link(x: np.array):
-#         return sigmoid(x)
-#     @staticmethod
-#     def link_deriv(x: np.array):
-#         x = clip_probability(x)
-#         return inverse(x*(1-x))
-#     @staticmethod
-#     def inv_link_deriv(x: np.array):
-#         return sigmoid(x)*(1-sigmoid(x))
+class LogitLink(BaseLink):
+    @staticmethod
+    def link(x: np.array):
+        return logit(x)
+    @staticmethod
+    def inv_link(x: np.array):
+        return sigmoid(x)
+    @staticmethod
+    def link_deriv(x: np.array):
+        x = clip_probability(x)
+        return inverse(x*(1-x))
+    @staticmethod
+    def inv_link_deriv(x: np.array):
+        return sigmoid(x)*(1-sigmoid(x))
 
 
 # class ProbitLink(BaseLink):
@@ -133,4 +133,4 @@ def cdf_link_factory(rv):
     return CDFLink  
 
 ProbitLink = cdf_link_factory(norm)
-LogitLink =cdf_link_factory(logistic)
+# LogitLink =cdf_link_factory(logistic)
