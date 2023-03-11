@@ -1,7 +1,7 @@
 import skinnyglms as skinny
 import statsmodels.api as sm
 import numpy as np
-skinny_link = skinny.links.ProbitLink()
+skinny_link = skinny.links.LogitLink()
 
 np.random.seed(9876)
 n = 100
@@ -14,7 +14,7 @@ y = np.random.binomial(1, probs, (n, 1))
 
 skinny_model = skinny.glm.SkinnyGLM(family=skinny.families.BinomialFamily(skinny_link))
 skinny_model._irls(X, y)
-stats_irls = sm.GLM(y, X, sm.families.Binomial(sm.genmod.families.links.probit()))
+stats_irls = sm.GLM(y, X, sm.families.Binomial(sm.genmod.families.links.logit()))
 stats_model = stats_irls.fit()
 
 print(f"true parameter estimates: {b.flatten()}")

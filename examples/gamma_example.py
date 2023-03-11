@@ -6,8 +6,8 @@ import numpy as np
 skinny_link = skinny.links.LogLink()
 sm_link = sm.genmod.families.links.log()
 
-n = 10000
-p = 10
+n = 100
+p = 1
 
 X = np.hstack([np.ones((n, 1)), np.random.normal(size=(n, p))])
 b = np.random.normal(size=(1, p+1))

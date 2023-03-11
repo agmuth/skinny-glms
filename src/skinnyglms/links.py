@@ -4,6 +4,7 @@ from scipy.stats import (
     norm,
     logistic
 )
+import numpy as np
 
 
 class BaseLink:
@@ -132,5 +133,5 @@ def cdf_link_factory(rv):
         
     return CDFLink  
 
-ProbitLink = cdf_link_factory(norm)
+# ProbitLink = cdf_link_factory(norm)
 # LogitLink =cdf_link_factory(logistic)
