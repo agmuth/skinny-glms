@@ -15,7 +15,7 @@ lam = offset * np.exp(X @ b.T)
 y = np.random.poisson(lam, (n, 1))
 
 skinny_model = skinny.glm.SkinnyGLM(family=skinny.families.PoissonFamily(skinny_link))
-skinny_model._irls(X, y, offset)
+skinny_model._irls(X, y, offset/1.)
 
 print(f"true parameter estimates: {b.flatten()}")
 print(f"skinny parameter estimates: {skinny_model.b.flatten()}")
