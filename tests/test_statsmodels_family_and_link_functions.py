@@ -9,10 +9,11 @@ from itertools import product
 np.random.seed(SEED)
 
 eta = np.linspace(ETA_BOUNDS[0], ETA_BOUNDS[1], 10)
+eta = eta.reshape((len(eta), 1))
 
 test_params = list()
 
-for distn in DISTRIBUTIONS[:1]:
+for distn in DISTRIBUTIONS:
     test_params += product(
         (STATSMODELS_MAPPING[distn]['families'],),
         STATSMODELS_MAPPING[distn]['links']
