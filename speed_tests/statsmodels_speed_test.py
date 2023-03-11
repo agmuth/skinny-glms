@@ -42,5 +42,5 @@ if __name__ == "__main__":
         families = STATSMODELS_MAPPING[distn]['families']
         for links in STATSMODELS_MAPPING[distn]['links']:
             print(families[0], links[0])
-            print(speed_test(families, links, 100, 10))
+            print(speed_test(families, links, 1000, 10))
             print()
