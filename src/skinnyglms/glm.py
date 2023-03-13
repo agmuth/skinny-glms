@@ -23,10 +23,7 @@ class SkinnyGLM():
 
         if var_weights is None:
             var_weights = np.ones(y.shape, dtype=float)
-        
-        mu_weights = count_weights
         var_weights_inv = 1. / np.multiply(count_weights, var_weights)
-
 
         eta_i = np.empty((X.shape[0], 1))
         m_i = np.empty((y.shape))

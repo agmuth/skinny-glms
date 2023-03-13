@@ -1,8 +1,8 @@
 import skinnyglms as skinny
 import statsmodels.api as sm
 
-TOL = 1e0
-SEED = 5555
+TOL = 1e-4
+SEED = 1324
 
 ETA_BOUNDS = (-1e1, 1e1)
 
