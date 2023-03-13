@@ -19,7 +19,7 @@ n_and_p = [(10**n, 10**p if p >= 0 else 0) for n in range(1, 4) for p in range(-
 
 @pytest.mark.parametrize("n, p", n_and_p)
 @pytest.mark.parametrize("families, links", test_params)
-def test_statsmodels_agreement(families, links, n, p):
+def test_statsmodels_model_paramas_agreement(families, links, n, p):
     np.random.seed(SEED)
 
     skinny_family = families[0](links[0]())

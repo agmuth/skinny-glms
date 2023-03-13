@@ -3,10 +3,8 @@ from skinnyglms.mappings.statsmodels import STATSMODELS_MAPPING
 import statsmodels.api as sm
 import numpy as np
 import pytest
-from tests.utils import SEED, TOL, DISTRIBUTIONS, ETA_BOUNDS
+from tests.utils import DISTRIBUTIONS, ETA_BOUNDS
 from itertools import product
-
-np.random.seed(SEED)
 
 eta = np.linspace(ETA_BOUNDS[0], ETA_BOUNDS[1], 10)
 eta = eta.reshape((len(eta), 1))
@@ -57,7 +55,6 @@ def test_statsmodels_agreement_variance(families, links):
 def test_statsmodels_agreement_inv_link_deriv(families, links):
     sk_family = families[0](links[0]())
     sm_familiy = families[1](links[1]())
-    mu_sk = sk_family.link.inv_link(eta)
     mu_sm = sm_familiy.fitted(eta)
 
     assert np.allclose(sk_family.link.inv_link_deriv(eta), sm_familiy.link.deriv(mu_sm)**-1)
