@@ -2,6 +2,9 @@ from skinnyglms.links import *
 from typing import Union
 
 class BaseFamily:
+    def __str__(self):
+        return "BaseFamily"
+        
     def __init__(self, link: BaseLink, canonical_link: BaseLink):
         self.link = link
         self.canonical_link = canonical_link
@@ -14,6 +17,9 @@ class BaseFamily:
 
 
 class GaussianFamily(BaseFamily):
+    def __str__(self):
+        return "GaussianFamily"
+        
     def __init__(self, link):
         super().__init__(link, canonical_link=IdentityLink())
     
@@ -24,6 +30,9 @@ class GaussianFamily(BaseFamily):
 
 
 class BinomialFamily(BaseFamily):
+    def __str__(self):
+        return "BinomialFamily"
+        
     def __init__(self, link: BaseLink):
         super().__init__(link, canonical_link=LogitLink())
 
@@ -33,6 +42,9 @@ class BinomialFamily(BaseFamily):
 
 
 class GammaFamily(BaseFamily):
+    def __str__(self):
+        return "GammaFamily"
+        
     def __init__(self, link: BaseLink):
         super().__init__(link, canonical_link=NegativeInverseLink())
 
@@ -43,6 +55,9 @@ class GammaFamily(BaseFamily):
 
 
 class PoissonFamily(BaseFamily):
+    def __str__(self):
+        return "PoissonFamily"
+        
     def __init__(self, link: BaseLink):
         super().__init__(link, canonical_link=LogLink())
 

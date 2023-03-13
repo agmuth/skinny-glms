@@ -10,6 +10,7 @@ src/skinnyglms.egg-info/SOURCES.txt
 src/skinnyglms.egg-info/dependency_links.txt
 src/skinnyglms.egg-info/top_level.txt
 src/skinnyglms/mappings/__init__.py
+src/skinnyglms/mappings/sklearn.py
 src/skinnyglms/mappings/statsmodels.py
 tests/test_statsmodels_agreement.py
 tests/test_statsmodels_family_and_link_functions.py

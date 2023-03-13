@@ -1,9 +1,8 @@
 import skinnyglms as skinny
-from skinnyglms.mappings.statsmodels import STATSMODELS_MAPPING
 import statsmodels.api as sm
 import numpy as np
 import pytest
-from tests.utils import DISTRIBUTIONS, ETA_BOUNDS
+from tests.utils import DISTRIBUTIONS, ETA_BOUNDS, STATSMODELS_MAPPING
 from itertools import product
 
 eta = np.linspace(ETA_BOUNDS[0], ETA_BOUNDS[1], 10)

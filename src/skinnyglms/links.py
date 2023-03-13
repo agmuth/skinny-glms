@@ -8,6 +8,9 @@ import numpy as np
 
 
 class BaseLink:
+    def __str__(self):
+        return "BaseLink"
+    
     @staticmethod
     def link(x: np.array):
         raise NotImplementedError
@@ -23,6 +26,9 @@ class BaseLink:
     
 
 class IdentityLink(BaseLink):
+    def __str__(self):
+        return "IdentityLink"
+    
     @staticmethod
     def link(x: np.array):
         return x
@@ -38,6 +44,9 @@ class IdentityLink(BaseLink):
 
 
 class LogitLink(BaseLink):
+    def __str__(self):
+        return "LogitLink"
+    
     @staticmethod
     def link(x: np.array):
         return logit(x)
@@ -64,6 +73,9 @@ class LogitLink(BaseLink):
 
 
 class LogLink(BaseLink):
+    def __str__(self):
+        return "LogLink"
+    
     @staticmethod
     def link(x: np.array):
         return logarithm(x)
@@ -79,6 +91,9 @@ class LogLink(BaseLink):
 
 
 class NegativeInverseLink(BaseLink):
+    def __str__(self):
+        return "NegativeInverseLink"
+    
     @staticmethod
     def link(x: np.array):
         return -inverse(x)

@@ -1,9 +1,8 @@
 import skinnyglms as skinny
-from skinnyglms.mappings.statsmodels import STATSMODELS_MAPPING
 import statsmodels.api as sm
 import numpy as np
 import pytest
-from tests.utils import SEED, TOL, DISTRIBUTIONS
+from tests.utils import SEED, TOL, DISTRIBUTIONS, STATSMODELS_MAPPING, N_AND_P
 from itertools import product
 
 test_params = list()
@@ -14,10 +13,9 @@ for distn in DISTRIBUTIONS:
         STATSMODELS_MAPPING[distn]['links']
     )
 
-n_and_p = [(10**n, 10**p if p >= 0 else 0) for n in range(1, 4) for p in range(-1, n)]
 
 
-@pytest.mark.parametrize("n, p", n_and_p)
+@pytest.mark.parametrize("n, p", N_AND_P)
 @pytest.mark.parametrize("families, links", test_params)
 def test_statsmodels_model_paramas_agreement(families, links, n, p):
     np.random.seed(SEED)
