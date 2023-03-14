@@ -1,4 +1,4 @@
-from skinnyglms.functions import *
+from skinnyglms.functions_source import *
 from scipy.stats._distn_infrastructure import rv_continuous
 from scipy.stats import (
     norm,
@@ -62,14 +62,7 @@ class LogitLink(BaseLink):
         return sigmoid(x)*(1-sigmoid(x))
 
 
-# class ProbitLink(BaseLink):
-#     def __init__(cls):
-#         super().__init__(probit, inv_probit)
 
-
-# class CLogLogLink(BaseLink):
-#     def __init__(cls):
-#         super().__init__(cloglog, inv_cloglog)
 
 
 class LogLink(BaseLink):
@@ -125,28 +118,38 @@ class NegativeInverseLink(BaseLink):
 #     def inv_link_deriv(cls, x: np.array):
 #         return cls.rv.pdf(cls.rv.cdf(x))
 
-def cdf_link_factory(rv):
-    class CDFLink(BaseLink):
-        
-        @staticmethod
-        def link(x: np.array):
-            x = clip_probability(x)
-            return rv.ppf(x)
-        
-        @staticmethod        
-        def inv_link(x: np.array):
-            return rv.cdf(x)
-        
-        @staticmethod        
-        def link_deriv(x: np.array):
-            x = clip_probability(x)
-            return 1. / rv.pdf(rv.ppf(x))
-            
-        @staticmethod        
-        def inv_link_deriv(x: np.array):
-            return rv.pdf(x)
-        
-    return CDFLink  
+# class ProbitLink(BaseLink):  
 
-# ProbitLink = cdf_link_factory(norm)
-# LogitLink =cdf_link_factory(logistic)
+#     def link(cls, x: np.array):
+#         x = np.clip(x, MACHINE_EPS, 1-MACHINE_EPS)
+#         return norm.ppf(x)
+      
+#     def inv_link(cls, x: np.array):
+#         return norm.cdf(x)
+    
+#     def link_deriv(cls, x: np.array):
+#         x = np.clip(x, MACHINE_EPS, 1-MACHINE_EPS)
+#         return 1. / norm.pdf(norm.ppf(x))
+    
+#     def inv_link_deriv(cls, x: np.array):
+#         return norm.pdf(x)
+
+
+class ProbitLink(BaseLink):  
+    def __str__(self):
+        return "ProbitLink"
+    
+    def link(cls, x: np.array):
+        return probit(x)
+      
+    def inv_link(cls, x: np.array):
+        return inv_probit(x)
+    
+    def link_deriv(cls, x: np.array):
+        return 1. / inv_probit_deriv(probit(x))
+    
+    def inv_link_deriv(cls, x: np.array):
+        return inv_probit_deriv(x) 
+    
+
+

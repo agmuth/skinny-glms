@@ -44,4 +44,4 @@ if __name__ == "__main__":
                 results.append([str(skinny_family), str(skinny_family.link), n, p, *fitting_times])
                 
     results = pd.DataFrame(results, columns=["family", "link", "n", "p", "skinnyglms_secs", "statsmodels_secs"])
-    results.to_csv("speed_comparison.csv")
+    results.to_csv("speed_comparison.csv", index=False)

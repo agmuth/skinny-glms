@@ -19,7 +19,7 @@ STATSMODELS_MAPPING = {
         'families' : (skinny.families.BinomialFamily, sm.families.Binomial),
         'links' : [
             (skinny.links.LogitLink, sm.genmod.families.links.logit),
-            # (skinny.links.ProbitLink, sm.genmod.families.links.probit),
+            (skinny.links.ProbitLink, sm.genmod.families.links.probit),
             # (skinny.links.CLogLogLink, sm.genmod.families.links.cloglog),
         ],
     },
