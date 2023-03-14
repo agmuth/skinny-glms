@@ -54,6 +54,19 @@ class GammaFamily(BaseFamily):
         return np.hstack([np.random.gamma(shape=shape, scale=scale, size=(theta.shape[0], 1)) for _ in range(n)])
 
 
+class InverseGaussianFamily(BaseFamily):
+    def __str__(self):
+        return "InverseGaussianFamily"
+        
+    def __init__(self, link: BaseLink):
+        super().__init__(link, canonical_link=InverssGaussianCanonicalLink())
+
+    def sample(self, theta: np.ndarray, phi: Union[int, np.ndarray]=1, n: int=1):
+        mean = self.canonical_link.inv_link(theta)
+        scale = phi
+        return np.hstack([np.random.wald(mean=mean, scale=scale, size=(theta.shape[0], 1)) for _ in range(n)])
+
+
 class PoissonFamily(BaseFamily):
     def __str__(self):
         return "PoissonFamily"

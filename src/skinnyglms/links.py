@@ -152,4 +152,23 @@ class ProbitLink(BaseLink):
         return inv_probit_deriv(x) 
     
 
+class InverssGaussianCanonicalLink(BaseLink):  
+    def __str__(self):
+        return "InverssGaussianCanonicalLink"
+    
+    def link(cls, x: np.array):
+        return 0.5*np.power(x, -2)
+      
+    def inv_link(cls, x: np.array):
+        # return np.power(-2*x, -0.5)
+        return np.power(2*x, -0.5)
+    
+    def link_deriv(cls, x: np.array):
+        return np.power(x, -3)
+    
+    def inv_link_deriv(cls, x: np.array):
+        # return -0.5 * np.power(-2*x, -1.5) 
+        return -0.5 * np.power(2*x, -1.5) 
+    
+
 

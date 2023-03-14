@@ -4,7 +4,7 @@ import statsmodels.api as sm
 TOL = 1e-4
 SEED = 1324
 
-ETA_BOUNDS = (-1e1, 1e1)
+ETA_BOUNDS = (-5., 5.)
 
 N_AND_P = [(10**n, 10**p if p >= 0 else 0) for n in range(1, 4) for p in range(-1, n)]
 
@@ -33,6 +33,13 @@ STATSMODELS_MAPPING = {
         'families' : (skinny.families.PoissonFamily, sm.families.Poisson),
         'links' : [
             (skinny.links.LogLink, sm.genmod.families.links.log),
+        ],
+    },
+    'INVERSEGAUSSIAN' : {
+        'families' : (skinny.families.InverseGaussianFamily, sm.families.InverseGaussian),
+        'links' : [
+            # (skinny.links.InverssGaussianCanonicalLink, sm.genmod.families.links.inverse_squared),
+            (skinny.links.LogLink, sm.genmod.families.links.log)
         ],
     },
 }

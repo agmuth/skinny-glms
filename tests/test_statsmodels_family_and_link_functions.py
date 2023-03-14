@@ -5,10 +5,10 @@ import pytest
 from tests.utils import DISTRIBUTIONS, ETA_BOUNDS, STATSMODELS_MAPPING
 from itertools import product
 
-# eta = np.linspace(ETA_BOUNDS[0], ETA_BOUNDS[1], 1)
-# eta = eta.reshape((len(eta), 1))
+eta = np.linspace(ETA_BOUNDS[0], ETA_BOUNDS[1], 10)
+eta = eta.reshape((len(eta), 1))
 
-eta = np.zeros((1, 1))
+
 
 test_params = list()
 

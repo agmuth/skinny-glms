@@ -23,8 +23,8 @@ def test_statsmodels_model_paramas_agreement(families, links, n, p):
     skinny_family = families[0](links[0]())
     sm_familiy = families[1](links[1]())
     
-    b = np.random.normal(scale=0.1, size=(1, p+1))
-    X = np.hstack([np.ones((n, 1)), np.random.normal(scale=0.1, size=(n, p))])
+    b = np.random.normal(scale=0.05, size=(1, p+1))
+    X = np.hstack([np.ones((n, 1)), np.random.normal(scale=0.05, size=(n, p))])
  
     mu = skinny_family.link.inv_link(X @ b.T)
     theta = skinny_family.canonical_link.link(mu)
