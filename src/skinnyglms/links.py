@@ -1,9 +1,4 @@
 from skinnyglms.functions_source import *
-from scipy.stats._distn_infrastructure import rv_continuous
-from scipy.stats import (
-    norm,
-    logistic
-)
 import numpy as np
 
 
@@ -157,18 +152,16 @@ class InverssGaussianCanonicalLink(BaseLink):
         return "InverssGaussianCanonicalLink"
     
     def link(cls, x: np.array):
-        return 0.5*np.power(x, -2)
+        return inverse_gaussian_link(x)
       
     def inv_link(cls, x: np.array):
-        # return np.power(-2*x, -0.5)
-        return np.power(2*x, -0.5)
+        return inverse_gaussian_inv_link(x)
     
     def link_deriv(cls, x: np.array):
-        return np.power(x, -3)
+        return inverse_gaussian_link_deriv(x)
     
     def inv_link_deriv(cls, x: np.array):
-        # return -0.5 * np.power(-2*x, -1.5) 
-        return -0.5 * np.power(2*x, -1.5) 
+        return inverse_gaussian_inv_link_deriv(x)
     
 
 

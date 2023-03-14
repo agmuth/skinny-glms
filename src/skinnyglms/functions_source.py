@@ -167,6 +167,25 @@ def loglog(x: np.ndarray) -> np.ndarray:
     return logarithm(logarithm(x))
 
 
+@njit()
+@cc.export("inverse_gaussian_link", cc_2d_array_to_2d_array)
+def inverse_gaussian_link(x: np.array) -> np.ndarray:
+    return 0.5*np.power(x, -2)
+    
+@njit()
+@cc.export("inverse_gaussian_inv_link", cc_2d_array_to_2d_array)
+def inverse_gaussian_inv_link(x: np.array) -> np.ndarray:
+    return np.power(2*x, -0.5)
 
+@njit()
+@cc.export("inverse_gaussian_link_deriv", cc_2d_array_to_2d_array)
+def inverse_gaussian_link_deriv(x: np.array) -> np.ndarray:
+    return np.power(x, -3)
+
+@njit()
+@cc.export("inverse_gaussian_inv_link_deriv", cc_2d_array_to_2d_array)
+def inverse_gaussian_inv_link_deriv(x: np.array) -> np.ndarray:
+    return -0.5 * np.power(2*x, -1.5) 
+    
 if __name__ == "__main__":
     cc.compile()
