@@ -2,12 +2,10 @@ import numpy as np
 from numba.pycc import CC
 from numba import njit
 import math
-import scipy.special as sc
-from scipy.stats import norm
 
 
 cc = CC("functions")
-# cc.verbose = True
+cc.verbose = True
 
 DTYPE = np.float64
 MACHINE_EPS = np.finfo(DTYPE).eps
@@ -17,6 +15,65 @@ LOG_MACHINE_MAX = np.log(MACHINE_MAX)
 
 cc_2d_array_to_2d_array = "f8[:, :](f8[:, :])"
 
+def generate_erf_coefs(n: int) -> np.ndarray:
+    # https://mathworld.wolfram.com/Erf.html
+    coefs = 2/math.sqrt(math.pi) * np.array([(-1)**k / (math.gamma(k+1)*(2*k+1)) for k in range(n+1)])
+    return coefs
+
+
+def generate_erfinv_coefs(n: int) -> np.ndarray:
+    # https://mathworld.wolfram.com/InverseErf.html
+    coefs = [1., 1.]
+    for k in range(2, n+1):
+        c_k = 0
+        for j in range(k):
+            c_k += coefs[j]*coefs[k-1-j] / ((j+1)*(2*j+1))
+        coefs.append(c_k)
+    return np.array([c/(2*k + 1) * (0.5*math.sqrt(math.pi))**(2*k+1) for k, c in enumerate(coefs)])
+
+
+ERF_COEFS = generate_erf_coefs(10)
+ERFINV_COEFS = generate_erfinv_coefs(10)
+
+@njit()
+@cc.export("erf_f8", "f8(f8)")
+def erf_f8(x):
+    return np.dot(
+        ERF_COEFS,
+        np.array([x**(2*k+1) for k in range(len(ERF_COEFS))])
+    )
+
+
+@njit()
+@cc.export("erf_v", cc_2d_array_to_2d_array)
+def erf_v(x: np.ndarray) -> np.ndarray:
+    n= x.shape[0]
+    m = x.shape[1]
+    res = np.empty((n, m))
+    for i in range(n):
+        for j in range(m):
+            res[i, j] = erf_f8(x[i, j])
+    return res
+
+@njit()
+@cc.export("erfinv_f8", "f8(f8)")
+def erfinv_f8(x):
+    return np.dot(
+        ERF_COEFS,
+        np.array([x**(2*k+1) for k in range(len(ERFINV_COEFS))])
+    )
+
+
+@njit()
+@cc.export("erfinv_v", cc_2d_array_to_2d_array)
+def erfinv_v(x: np.ndarray) -> np.ndarray:
+    n= x.shape[0]
+    m = x.shape[1]
+    res = np.empty((n, m))
+    for i in range(n):
+        for j in range(m):
+            res[i, j] = erfinv_f8(x[i, j])
+    return res
 
 @njit()
 @cc.export("clip_probability", cc_2d_array_to_2d_array)
@@ -58,87 +115,14 @@ def logarithm(x: np.ndarray) -> np.ndarray:
     return np.log(x)
 
 @njit()
-@cc.export("erf", cc_2d_array_to_2d_array)
-def erf(x: np.ndarray) -> np.ndarray:
-    n= x.shape[0]
-    m = x.shape[1]
-    res = np.empty((n, m))
-    for i in range(n):
-        for j in range(m):
-            res[i, j] = sc.erf(x[i, j])
-    return res
-    # coefs = [1., 1/3, 1/10, 1/42, 1/216, 1/1320]
-    # erf_of_x = x
-    # x_squared = np.square(x)
-    # for n in range(1, len(coefs)):
-    #     x *= x_squared      
-    #     erf_of_x += (-1)**n * x * coefs[n]
-    # erf_of_x *= 2 / math.sqrt(math.pi)
-    # return erf_of_x
-
-@njit()
-@cc.export("erfinv", cc_2d_array_to_2d_array)
-def erfinv(x: np.ndarray) -> np.ndarray:
-    n = x.shape[0]
-    m = x.shape[1]
-    res = np.empty((n, m))
-    for i in range(n):
-        for j in range(m):
-            res[i, j] = sc.erfinv(x[i, j])
-    return res
-    # coefs = [1., 1/12, 7/480, 127/40320, 4369/5806080, 34807/18247]
-    # erfinv_of_x = x
-    # x_squared = np.square(x)
-    # for n in range(1, len(coefs)):
-    #     x *= x_squared      
-    #     erfinv_of_x += math.pi**n * coefs[n] * x
-
-    # erfinv_of_x *= 0.5 * math.sqrt(math.pi)
-    # return erfinv_of_x
-
-# @njit()
-# @cc.export("norm_cdf", cc_2d_array_to_2d_array)
-def norm_cdf(x: np.ndarray) -> np.ndarray:
-    n = x.shape[0]
-    m = x.shape[1]
-    res = np.empty((n, m))
-    for i in range(n):
-        for j in range(m):
-            res[i, j] = norm.cdf(x[i, j])
-    return res
-
-# @njit()
-# @cc.export("norm_ppf", cc_2d_array_to_2d_array)
-def norm_ppf(x: np.ndarray) -> np.ndarray:
-    x = clip_probability(x)
-    n = x.shape[0]
-    m = x.shape[1]
-    res = np.empty((n, m))
-    for i in range(n):
-        for j in range(m):
-            res[i, j] = norm.ppf(x[i, j])
-    return res
-
-# @njit()
-# @cc.export("norm_pdf", cc_2d_array_to_2d_array)
-def norm_pdf(x: np.ndarray) -> np.ndarray:
-    n = x.shape[0]
-    m = x.shape[1]
-    res = np.empty((n, m))
-    for i in range(n):
-        for j in range(m):
-            res[i, j] = norm.pdf(x[i, j])
-    return res
-
-@njit()
 @cc.export("inv_probit", cc_2d_array_to_2d_array)
 def inv_probit(x: np.ndarray) -> np.ndarray:
-    return 0.5 * (1 + erf(x / np.sqrt(2)))
+    return 0.5 * (1 + erf_v(x / np.sqrt(2)))
 
 @njit()
 @cc.export("probit", cc_2d_array_to_2d_array)
 def probit(x: np.ndarray) -> np.ndarray:
-    return np.sqrt(2) * erfinv(2*clip_probability(x) - 1)
+    return np.sqrt(2) * erfinv_v(2*clip_probability(x) - 1)
 
 @njit()
 @cc.export("inv_probit_deriv", cc_2d_array_to_2d_array)
@@ -190,6 +174,7 @@ def inverse_gaussian_link_deriv(x: np.array) -> np.ndarray:
 def inverse_gaussian_inv_link_deriv(x: np.array) -> np.ndarray:
     x = np.sign(x) * np.clip(np.abs(x), MACHINE_EPS, MACHINE_MAX)
     return -0.5 * np.power(2*x, -1.5) 
+
     
 if __name__ == "__main__":
     cc.compile()

@@ -1,4 +1,4 @@
-from skinnyglms.functions_source import *
+from skinnyglms.functions import *
 import numpy as np
 
 
