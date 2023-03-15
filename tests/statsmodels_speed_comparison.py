@@ -20,10 +20,16 @@ def speed_test(families, links, n, p, repeats=5, number=10):
     skinnyglms_glm = skinny.glm.SkinnyGLM(family=skinny_family)
     statsmodel_glm = sm.GLM(y, X, family=sm_familiy)
 
-    skinnyglms__seconds = min(timeit.repeat("skinnyglms_glm._irls(X, y)", repeat=repeats, number=number, globals=locals())) / number 
-    statsmodels__seconds = min(timeit.repeat("statsmodel_glm.fit()", repeat=repeats, number=number, globals=locals())) / number 
+    try:
+        skinnyglms_seconds = min(timeit.repeat("skinnyglms_glm._irls(X, y)", repeat=repeats, number=number, globals=locals())) / number 
+    except Exception as e:
+        skinnyglms_seconds = -1
+    try:
+        statsmodels_seconds = min(timeit.repeat("statsmodel_glm.fit()", repeat=repeats, number=number, globals=locals())) / number 
+    except Exception as e:
+        statsmodels_seconds = -1
     
-    return (skinnyglms__seconds, statsmodels__seconds)
+    return (skinnyglms_seconds, statsmodels_seconds)
 
 
 
