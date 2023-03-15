@@ -38,7 +38,7 @@ STATSMODELS_MAPPING = {
     'INVERSEGAUSSIAN' : {
         'families' : (skinny.families.InverseGaussianFamily, sm.families.InverseGaussian),
         'links' : [
-            # (skinny.links.InverssGaussianCanonicalLink, sm.genmod.families.links.inverse_squared),
+            # (skinny.links.InverseGaussianCanonicalLink, sm.genmod.families.links.inverse_squared),
             (skinny.links.LogLink, sm.genmod.families.links.log)
         ],
     },

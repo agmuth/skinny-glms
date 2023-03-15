@@ -59,7 +59,7 @@ class InverseGaussianFamily(BaseFamily):
         return "InverseGaussianFamily"
         
     def __init__(self, link: BaseLink):
-        super().__init__(link, canonical_link=InverssGaussianCanonicalLink())
+        super().__init__(link, canonical_link=InverseGaussianCanonicalLink())
 
     def sample(self, theta: np.ndarray, phi: Union[int, np.ndarray]=1, n: int=1):
         mean = self.canonical_link.inv_link(theta)

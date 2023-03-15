@@ -147,9 +147,9 @@ class ProbitLink(BaseLink):
         return inv_probit_deriv(x) 
     
 
-class InverssGaussianCanonicalLink(BaseLink):  
+class InverseGaussianCanonicalLink(BaseLink):  
     def __str__(self):
-        return "InverssGaussianCanonicalLink"
+        return "InverseGaussianCanonicalLink"
     
     def link(cls, x: np.array):
         return inverse_gaussian_link(x)
