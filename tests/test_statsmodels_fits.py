@@ -1,18 +1,18 @@
-import skinnyglms as skinny
-import statsmodels.api as sm
+from itertools import product
+
 import numpy as np
 import pytest
-from tests.utils import SEED, TOL, DISTRIBUTIONS, STATSMODELS_MAPPING, N_AND_P
-from itertools import product
+import statsmodels.api as sm
+
+import skinnyglms as skinny
+from tests.utils import DISTRIBUTIONS, N_AND_P, SEED, STATSMODELS_MAPPING, TOL
 
 test_params = list()
 
 for distn in DISTRIBUTIONS:
     test_params += product(
-        (STATSMODELS_MAPPING[distn]['families'],),
-        STATSMODELS_MAPPING[distn]['links']
+        (STATSMODELS_MAPPING[distn]["families"],), STATSMODELS_MAPPING[distn]["links"]
     )
-
 
 
 @pytest.mark.parametrize("n, p", N_AND_P)
@@ -22,14 +22,14 @@ def test_statsmodels_model_paramas_agreement(families, links, n, p):
 
     skinny_family = families[0](links[0]())
     sm_familiy = families[1](links[1]())
-    
-    b = np.random.normal(scale=0.05, size=(1, p+1))
+
+    b = np.random.normal(scale=0.05, size=(1, p + 1))
     X = np.hstack([np.ones((n, 1)), np.random.normal(scale=0.05, size=(n, p))])
- 
+
     mu = skinny_family.link.inv_link(X @ b.T)
     theta = skinny_family.canonical_link.link(mu)
     y = skinny_family.sample(theta)
-    
+
     skinny_model = skinny.glm.SkinnyGLM(skinny_family)
     skinny_model._irls(X, y)
 
@@ -39,4 +39,6 @@ def test_statsmodels_model_paramas_agreement(families, links, n, p):
     print(f"true parameter estimates: {b.flatten()}")
     print(f"skinny parameter estimates: {skinny_model.b.flatten()}")
     print(f"statsmodels parameter estimates: {stats_model.params.flatten()}")
-    assert ((skinny_model.b.flatten() - stats_model.params.flatten())**2).sum() / (p+1) < TOL
+    assert ((skinny_model.b.flatten() - stats_model.params.flatten()) ** 2).sum() / (
+        p + 1
+    ) < TOL

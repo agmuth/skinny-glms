@@ -1,5 +1,24 @@
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+[tool.poetry]
+name = "skinnyglms"
+version = "0.1.0"
+description = "Bare bones IRLS sovler design for composibility and extensibility."
+authors = ["Andrew Muth <agmuth@gmail.com>"]
+license = "MIT"
+readme = "README.md"
 
-pythonpath = "tests/"
+[tool.poetry.dependencies]
+python = "^3.10"
+numpy = "<1.25"
+numba = "<0.58.0"
+
+
+[tool.poetry.group.dev.dependencies]
+statsmodels = "^0.14.0"
+pytest = "^7.4.0"
+black = "^23.7.0"
+isort = "^5.12.0"
+ruff = "^0.0.278"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
